@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 class GenerateCSVView(View):
-    @method_decorator(csrf_exempt)
+    
     def post(self, request):
         fake = Faker()
         data = StringIO()
@@ -45,7 +45,7 @@ class GenerateCSVView(View):
             ])
         data.seek(0)
         filename = 'fake_data.csv'
-        fs = FileSystemStorage()
+        fs = FileSystemStorage(location='media')
         file = fs.save(filename, data)
         url = fs.url(file)
         return JsonResponse({'url': url})

@@ -2,14 +2,9 @@
 <html>
 <head>
     <title>Generate CSV</title>
-</head>
-<body>
-    <h1>Generate CSV</h1>
-    <button id="generate-csv-btn">Generate CSV</button>
-    <br><br>
-    <div id="csv-download-link"></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('#generate-csv-btn').click(function() {
@@ -23,12 +18,50 @@
                     success: function(response) {
                         var link = '<a href="' + response.url + '">Download CSV</a>';
                         $('#csv-download-link').html(link);
+                        $('#csv-download-modal').modal('show');
                     }
                 });
             });
         });
     </script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
 
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">Generate CSV</h1>
+                <div class="text-center mb-4">
+                    <button class="btn btn-primary" id="generate-csv-btn">Generate CSV</button>
+                </div>
+                <div class="text-center" id="csv-download-link" href="{{ MEDIA_URL }}{{ file }}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="csv-download-modal" tabindex="-1" role="dialog" aria-labelledby="csv-download-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="csv-download-modal-label">CSV Generated</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>CSV file successfully generated!</p>
+                    <p><a href="{{ MEDIA_URL }}{{ file }}">Download CSV</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     {% csrf_token %}
 </body>
 </html>
+
