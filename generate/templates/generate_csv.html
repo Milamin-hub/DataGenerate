@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate CSV</title>
+</head>
+<body>
+    <h1>Generate CSV</h1>
+    <button id="generate-csv-btn">Generate CSV</button>
+    <br><br>
+    <div id="csv-download-link"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#generate-csv-btn').click(function() {
+                var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                $.ajax({
+                    url: '/generate-csv/',
+                    type: 'POST',
+                    headers: {
+                        "X-CSRFToken": csrftoken
+                    },
+                    success: function(response) {
+                        var link = '<a href="' + response.url + '">Download CSV</a>';
+                        $('#csv-download-link').html(link);
+                    }
+                });
+            });
+        });
+    </script>
+
+    {% csrf_token %}
+</body>
+</html>
