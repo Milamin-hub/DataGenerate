@@ -6,12 +6,8 @@ import csv
 from faker import Faker
 from io import StringIO
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-
 
 class GenerateCSVView(View):
-    
     def post(self, request):
         fake = Faker()
         data = StringIO()
@@ -29,7 +25,8 @@ class GenerateCSVView(View):
             'Address', 
             'Date'
         ])
-        for i in range(10):
+        num_records = int(request.POST.get('num-records', 1))
+        for i in range(num_records):
             writer.writerow([
                 fake.first_name(),
                 fake.last_name(),
@@ -48,7 +45,7 @@ class GenerateCSVView(View):
         fs = FileSystemStorage(location='media')
         file = fs.save(filename, data)
         url = fs.url(file)
-        return JsonResponse({'url': url})
+        return JsonResponse({'url': url, 'num_records': num_records})
 
     def get(self, request):
         return render(request, 'generate_csv.html', {})
