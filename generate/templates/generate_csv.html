@@ -8,12 +8,16 @@
     <script>
         $(document).ready(function() {
             $('#generate-csv-btn').click(function() {
+                var numRecords = $('#num-records-input').val();
                 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
                 $.ajax({
                     url: '/generate-csv/',
                     type: 'POST',
                     headers: {
                         "X-CSRFToken": csrftoken
+                    },
+                    data: {
+                        'num-records': numRecords,
                     },
                     success: function(response) {
                         var link = '<a href="' + response.url + '">Download CSV</a>';
@@ -35,6 +39,8 @@
             <div class="col-md-12">
                 <h1 class="text-center mb-4">Generate CSV</h1>
                 <div class="text-center mb-4">
+                    <label for="num-records-input">Number of Records:</label>
+                    <input type="number" id="num-records-input" name="num-records" value="1" min="1">
                     <button class="btn btn-primary" id="generate-csv-btn">Generate CSV</button>
                 </div>
                 <div class="text-center" id="csv-download-link" href="{{ MEDIA_URL }}{{ file }}"></div>
@@ -53,7 +59,6 @@
                 </div>
                 <div class="modal-body">
                     <p>CSV file successfully generated!</p>
-                    <p><a href="{{ MEDIA_URL }}{{ file }}">Download CSV</a></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
