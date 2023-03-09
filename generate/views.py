@@ -26,7 +26,6 @@ class GenerateCSVView(View):
             'Date'
         ])
         num_records = int(request.POST.get('num-records', 1))
-        self.status = {}
         for i in range(num_records):
             writer.writerow([
                 fake.first_name(),
@@ -41,23 +40,15 @@ class GenerateCSVView(View):
                 fake.address(),
                 fake.date(),
             ])
-            if i == num_records-1:
-                self.status[i] = 'ready'
-            else:
-                self.status[i] = 'processing'
+        status = 'ready'
         data.seek(0)
         filename = 'fake_data.csv'
         fs = FileSystemStorage(location='media')
         file = fs.save(filename, data)
         url = fs.url(file)
-        return JsonResponse({'url': url, 'num-records': num_records ,'status': self.status})
+        return JsonResponse({'url': url, 'num-records': num_records, 'status': status})
     
     def get(self, request):
-        num_records = int(request.POST.get('num-records', 1))
-        status = {}
-        for i in range(num_records):
-            if i == num_records-1:
-                status[i] = 'ready'
-            else:
-                status[i] = 'processing'
+        status = 'ready'
         return render(request, 'generate_csv.html', {'status': status})
+
