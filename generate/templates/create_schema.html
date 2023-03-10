@@ -1,0 +1,71 @@
+<div  style="width: 50%; margin: 0 auto;">
+    <form id="create-schema-form" method="POST" action="/create-schema/">
+        {% csrf_token %}
+        <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+        <label for="fields">Fields:</label>
+        <button type="button" id="add-field-button">Add Field</button>
+        <div id="fields-container">
+            <div class="field-container">
+            <input type="text" class="field-name" name="fields[][name]" required>
+            <select name="fields[][type]" required>
+                <option value="text">Text</option>
+                <option value="number">Number</option>
+                <option value="date">Date</option>
+            </select>
+            <button type="button" class="remove-field-button">Remove</button>
+            </div>
+        </div>
+        </div>
+        <button type="submit">Create Schema</button>
+    </form>
+  
+    <script>
+        const addFieldButton = document.querySelector('#add-field-button');
+        const fieldsContainer = document.querySelector('#fields-container');
+    
+        addFieldButton.addEventListener('click', () => {
+        const fieldContainer = document.createElement('div');
+        fieldContainer.classList.add('field-container');
+        fieldContainer.innerHTML = `
+            <input type="text" class="field-name" name="fields[][name]" required>
+            <select name="fields[][type]" required>
+            <option value="text">Text</option>
+            <option value="number">Number</option>
+            <option value="date">Date</option>
+            </select>
+            <button type="button" class="remove-field-button">Remove</button>
+        `;
+        fieldsContainer.appendChild(fieldContainer);
+        });
+    
+        fieldsContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.classList.contains('remove-field-button')) {
+            const fieldContainer = target.closest('.field-container');
+            fieldsContainer.removeChild(fieldContainer);
+        }
+        });
+    
+        const createSchemaForm = document.querySelector('#create-schema-form');
+    
+        createSchemaForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/create-schema/');
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+            } else {
+            console.error(xhr.statusText);
+            }
+        };
+        xhr.send(formData);
+        });
+    </script>
+</div>

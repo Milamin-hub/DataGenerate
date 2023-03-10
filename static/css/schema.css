@@ -1,0 +1,45 @@
+#create-schema-form {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+  
+#fields-container {
+  flex-direction: column;
+  align-items: center;
+}
+
+.field-container {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.field-container input,
+.field-container select {
+  margin-right: 10px;
+}
+
+.remove-field-button {
+  margin-left: 10px;
+}
+
+button[type="submit"] {
+  margin-top: 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0069d9;
+}
