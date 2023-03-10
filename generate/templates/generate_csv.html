@@ -8,35 +8,35 @@
     <script>
         $(document).ready(function() {
             $('#generate-csv-btn').click(function() {
-                genColorLabel();
-                generateCsv();
+                var numRecords = $('#num-records-input').val();
+                var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                $.ajax({
+                    url: '/generate-csv/',
+                    type: 'POST',
+                    data: {
+                        'num-records': numRecords,
+                    },
+                    headers: {
+                        "X-CSRFToken": csrftoken
+                    },
+                    success: function(response) {
+                        var link = '<a href="' + response.url + '">Download CSV</a>';
+                        var loop = '{% if status == "ready" %}\n<div class="status-label ready" id="cm-label"></div>\n{% endif %}'
+                        $('#csv-download-link').html(link);
+                        $('#csv-download-modal').modal('show');
+                        $('#color-label').html(loop);
+                        setInterval(function() {
+                            $('#cm-label').hide();
+                        }, 3000);
+                        $.each(response.status, function(index, value) {
+                            var statusDiv = $('#status-' + index);
+                            statusDiv.removeClass('processing ready');
+                            statusDiv.addClass('status-label status-' + index + ' ' + value);
+                        });
+                    }
+                });
             });
         });
-        function genColorLabel() {
-            var numRecords = $('#num-records-input').val();
-            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-            $.ajax({
-                url: '/generate-csv/',
-                type: 'POST',
-                data: {
-                    'num-records': numRecords,
-                },
-                headers: {
-                    "X-CSRFToken": csrftoken
-                },
-                success: function(response) {
-                    var link = '<a href="' + response.url + '">Download CSV</a>';
-                    $('#csv-download-link').html(link);
-                    $('#csv-download-modal').modal('show');
-                    $.each(response.status, function(index, value) {
-                        var statusDiv = $('#status-' + index);
-                        statusDiv.removeClass('processing ready');
-                        statusDiv.addClass('status-label status-' + index + ' ' + value);
-                    });
-                    
-                }
-            });
-        }
     </script>
     <style>
         .records {
@@ -49,10 +49,6 @@
             width: 10px;
             height: 10px;
             margin-right: 5px;
-        }
-
-        .processing {
-            background-color: yellow;
         }
 
         .ready {
@@ -72,10 +68,7 @@
                     <label for="num-records-input">Number of Records:</label>
                     <input type="number" id="num-records-input" name="num-records" value="1" min="1">
                     <button class="btn btn-primary" id="generate-csv-btn">Generate CSV</button>
-                    {{ status.keys }}
-                    {% for i in status.keys %}
-                        <div id="status-{{ i }}" class="status-label processing"></div>
-                    {% endfor %}
+                    <div class="status-label" id="color-label"></div>
                 </div>
                 <div class="text-center" id="csv-download-link" href="{{ MEDIA_URL }}{{ file }}"></div>
             </div>
