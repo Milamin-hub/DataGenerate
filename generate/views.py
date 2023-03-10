@@ -1,16 +1,13 @@
-from django.views.generic import View
-from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render
-import csv
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import JsonResponse
+from generate.models import Schema
+from django.views import View
 from faker import Faker
 from io import StringIO
-from django.views import View
+import csv
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
-from generate.models import Schema
-import json
 
 
 class GenerateCSVView(View):
@@ -101,7 +98,6 @@ class AddFieldView(View):
             schema.fields = fields
             schema.save()
         return JsonResponse({'status': 'ready', 'schema_data': request.POST})
-
 
 
 class LoginView(View):
