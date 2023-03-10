@@ -35,6 +35,27 @@
                     }
                 });
             });
+
+            $('#add-field-btn').click(function() {
+                var fieldData = $('#field-input').val();
+                var schemaId = $('#schema-id-input').val();
+                var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+                $.ajax({
+                    url: '/add-field/',
+                    type: 'POST',
+                    data: JSON.stringify({
+                    'schema_id': schemaId,
+                    'field': fieldData,
+                    }),
+                    headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                    },
+                    success: function(response) {
+                    location.reload();
+                    }
+                });
+            });
         });
     </script>
 
@@ -42,6 +63,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 class="text-center mb-4">Generate CSV</h1>
+                {% include 'create_schema.html' %}
                 <div class="text-center mb-4">
                     <label for="num-records-input">Number of Records:</label>
                     <input type="number" id="num-records-input" name="num-records" value="1" min="1">
@@ -54,4 +76,3 @@
     </div>
     {% csrf_token %}
 {% endblock %}
-

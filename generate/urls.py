@@ -7,6 +7,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('generate-csv/', GenerateCSVView.as_view(), name='home'),
+    path('create-schema/', CreateSchemaView.as_view(), name='create_schema'),
+    path('add-field/', AddFieldView.as_view(), name='add_field'),
     path('login/', LoginView.as_view(), name='login'),
 ]
 
