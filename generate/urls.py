@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('generate-csv/', GenerateCSVView.as_view(), name='generate_csv'),
+    path('generate-csv/', GenerateCSVView.as_view(), name='home'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
