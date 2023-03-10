@@ -67,6 +67,8 @@ class GenerateCSVView(View):
         return JsonResponse({'url': url, 'num-records': num_records, 'status': status})
 
     def get(self, request):
+        if not request.user.is_authenticated:
+            return redirect('login')
         status = 'ready'
         return render(request, 'generate_csv.html', {'status': status})
     
