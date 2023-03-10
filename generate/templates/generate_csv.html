@@ -10,7 +10,7 @@
                 var numRecords = $('#num-records-input').val();
                 var csrftoken = $("[name=csrfmiddlewaretoken]").val();
                 $.ajax({
-                    url: '/generate-csv/',
+                    url: '/',
                     type: 'POST',
                     data: {
                         'num-records': numRecords,
